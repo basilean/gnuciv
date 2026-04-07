@@ -5,6 +5,7 @@
 #include "grid.h"
 #include "widget.h"
 #include "bg.h"
+#include "position.h"
 #include "../event.h"
 
 typedef enum {
@@ -17,9 +18,11 @@ typedef enum {
 typedef struct layer_t {
 	layer_type type;
 	SDL_Texture *cache;
-	bool refresh;
+	position_t pos;
+	SDL_FRect rect;
 	bool enable;
 	bool active;
+	bool refresh;
 	union {
 		layer_grid_t *grid;
 		layer_bg_t *bg;

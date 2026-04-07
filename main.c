@@ -8,7 +8,8 @@
 SDL_AppResult SDL_AppInit(void **app, int argc, char **argv)
 {
 	SDL_AppResult rc = app_new(app, argc, argv);
-	game_init(*app);// <- Init all components for this game.
+  app_info();
+	game_init(*app); // <- Init all components for this game.
 	return rc;
 }
 
@@ -20,8 +21,8 @@ SDL_AppResult SDL_AppEvent(void *app, SDL_Event *event)
 SDL_AppResult SDL_AppIterate(void *app)
 {
 	app_input(app); // <- Do something with events according to layer/widget.
-	game_input(app); // <- events for this specific game.
-	game_logic(app);// <- Whatever game does.
+	game_input(app); // <- Events for this specific game.
+	game_logic(app); // <- Whatever game does.
 	app_resize(app);
 	app_draw(app);
 	event_clean(app);

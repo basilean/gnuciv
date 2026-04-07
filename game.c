@@ -12,10 +12,13 @@ void game_init(app_t *app) {
 
 	layer_t *bg = layer_bg_new(app->render, COLOR_BLACK, "bg.png", 255);
 	layer_list_add(app->layers, bg);
+	bg->pos.anchor = FULL;
 
 	layer_t *grid = layer_grid_new(app->render, 60, COLOR_GRAY_50);
 	layer_list_add(app->layers, grid);
 	grid->enable = false;
+	grid->pos.min = (SDL_FRect){20, 20, 200, 200};
+	grid->pos.max = (SDL_FRect){40, 40, 400, 400};
 	widget_t *widget = widget_box_new(app->render, (SDL_FRect){20, 20, 100, 100}, COLOR_GREEN);
 	layer_grid_add(grid->grid, widget);
 	widget_t *widget2 = widget_box_new(app->render, (SDL_FRect){130, 130, 50, 50}, COLOR_BLACK);

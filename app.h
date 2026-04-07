@@ -10,6 +10,7 @@ typedef struct app_t {
 	SDL_Renderer* render;
 	event_t *event;
 	layer_list_t *layers;
+	SDL_FRect screen;
 } app_t;
 
 SDL_AppResult app_new(void **, int, char **);

@@ -1,6 +1,8 @@
+#include <SDL3_ttf/SDL_ttf.h>
 #include "app.h"
 #include "event.h"
 #include "layer/layer.h"
+#include "layer/position.h"
 
 SDL_AppResult app_new(void **state, int argc, char **argv) {
 	app_t *app = SDL_calloc(1, sizeof(app_t));
@@ -18,15 +20,17 @@ SDL_AppResult app_new(void **state, int argc, char **argv) {
 		SDL_LogError(SDL_LOG_CATEGORY_AUDIO, "Audio %s.\n", SDL_GetError());
 	}
 
-//		if (TTF_Init() < 0) {
-//			SDL_LogCritical(SDL_LOG_CATEGORY_SYSTEM, "%s.\n", SDL_GetError());
-//			return SDL_APP_FAILURE;
-//		}
+	if (TTF_Init() < 0) {
+		SDL_LogCritical(SDL_LOG_CATEGORY_SYSTEM, "%s.\n", SDL_GetError());
+		return SDL_APP_FAILURE;
+	}
+
+	app->screen = (SDL_FRect){0, 0, 320, 240};
 
 	app->win = SDL_CreateWindow(
 		"GNU Civ",
-		320,
-		240,
+		app->screen.w,
+		app->screen.h,
 		SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_VULKAN
 	);
 
@@ -42,7 +46,6 @@ SDL_AppResult app_new(void **state, int argc, char **argv) {
 	app->event = SDL_calloc(1, sizeof(event_t));
 
 	*state = app;
-  app_info();
 	return SDL_APP_CONTINUE;
 }
 
@@ -69,7 +72,12 @@ void app_resize(app_t *app) {
 	if (!app->event->win.resize) {
 		return;
 	}
+	int w, h;
+	SDL_GetCurrentRenderOutputSize(app->render, &w, &h);
+	app->screen.w = w;
+	app->screen.h = h;
 	for(uint16_t i = 0; i < app->layers->count; i++) {
+		position_set(&app->screen, &app->layers->layer[i]->pos);
 		layer_resize(app->render, app->layers->layer[i]);
 	}
 }

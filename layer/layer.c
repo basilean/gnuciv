@@ -32,11 +32,12 @@ void layer_resize(SDL_Renderer *render, layer_t *layer) {
 	int w, h;
 	SDL_GetCurrentRenderOutputSize(render, &w, &h);
 	SDL_DestroyTexture(layer->cache);
+	
 	layer->cache = SDL_CreateTexture(
 		render,
 		SDL_PIXELFORMAT_RGBA8888,
 		SDL_TEXTUREACCESS_TARGET,
-		w, h
+		layer->pos.size.w, layer->pos.size.h
 	);
 	switch(layer->type) {
 		case LAYER_BG:
@@ -63,7 +64,7 @@ void layer_draw(SDL_Renderer *render, layer_t *layer) {
 		SDL_SetRenderTarget(render, NULL);
 		layer->refresh = false;
 	}
-	SDL_RenderTexture(render, layer->cache, NULL, NULL);
+	SDL_RenderTexture(render, layer->cache, NULL, &layer->pos.size);
 }
 
 static inline bool in_frect(const SDL_FPoint *p, const SDL_FRect *r) {
@@ -77,20 +78,15 @@ bool layer_input(event_t *event, layer_t *layer) {
 	if(!layer->enable || !layer->active) {
 		return false;
 	}
-	SDL_Log("Check layer: %x", layer);
 	switch(layer->type) {
 		case LAYER_GRID:
 				uint16_t x = event->mouse.motion.x / layer->grid->size;
 				uint16_t y = event->mouse.motion.y / layer->grid->size;
 				uint16_t pos = (layer->grid->w * y) + x;
 				if(layer->grid->cell[pos] != NULL) {
-					SDL_Log("Cell with content: %d", pos);
 					SDL_FPoint point = {event->mouse.motion.x, event->mouse.motion.y};
-					for(uint16_t ii = layer->grid->cell[pos]->count; ii > 0; ii--) {
-						uint16_t w = ii - 1;
-//								if(!app->layers->layer[i - 1]->enable || !app->layers->layer[i - 1]->active) {
-//									continue;
-//								}
+					for(uint16_t i = layer->grid->cell[pos]->count; i > 0; i--) {
+						uint16_t w = i - 1;
 						if(in_frect(&point, &layer->grid->cell[pos]->widget[w]->rect)) {
 							SDL_Log("Widget: %d", w);
 							return true;
