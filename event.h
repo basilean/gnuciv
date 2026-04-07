@@ -3,10 +3,11 @@
 #include <SDL3/SDL.h>
 
 #define KEY_MAX 8
+typedef struct widget_t widget_t;
 
 typedef struct {
 	int count;
-	int code[KEY_MAX];	
+	SDL_Scancode code[KEY_MAX];	
 } event_key_t;
 
 typedef enum {
@@ -20,6 +21,8 @@ typedef enum {
 typedef struct {
 	event_mouse_status_t status;
 	SDL_FPoint down;
+	SDL_FPoint off;
+	widget_t *widget;
 } event_mouse_button_t;
 
 typedef struct {

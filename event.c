@@ -1,5 +1,6 @@
 #include "event.h"
 #include "app.h"
+#include "layer/widget.h"
 
 int is_click(SDL_FPoint *event, SDL_FPoint *down) {
 	// TODO: Add optional pixel toleration.
@@ -22,15 +23,15 @@ SDL_AppResult event_call(app_t *app, SDL_Event *event) {
 			SDL_Log("Window resized: %d x %d", event->window.data1, event->window.data2);
 			break;
 
-		case SDL_EVENT_WINDOW_MOVED:
-			SDL_Log("Window moved: %d, %d", event->window.data1, event->window.data2);
-			break;
+//		case SDL_EVENT_WINDOW_MOVED:
+//			SDL_Log("Window moved: %d, %d", event->window.data1, event->window.data2);
+//			break;
 
 		case SDL_EVENT_KEY_DOWN:
-			code = SDL_GetKeyFromScancode(event->key.scancode, event->key.mod, true);
-			app->event->key.code[app->event->key.count] = code;
+//			code = SDL_GetKeyFromScancode(event->key.scancode, event->key.mod, true);
+			app->event->key.code[app->event->key.count] = event->key.scancode;
+//			SDL_Log("Key: %d", app->event->key.code[app->event->key.count]);
 			app->event->key.count++;
-//			SDL_Log("Key down: %s (scancode %d)", SDL_GetKeyName(code), event->key.scancode);
 			break;
 
 //		case SDL_EVENT_KEY_UP:
@@ -39,16 +40,26 @@ SDL_AppResult event_call(app_t *app, SDL_Event *event) {
 //			break;
 
 		case SDL_EVENT_MOUSE_MOTION:
-			app->event->mouse.state = SDL_GetMouseState(&app->event->mouse.motion.x, &app->event->mouse.motion.y);
-			app->event->mouse.is_motion = 1;
-//			SDL_Log("Mouse moved: %f, %f | %d", app->event.mouse.motion.x, app->event.mouse.motion.y, mstate);
+			int state = SDL_GetMouseState(&app->event->mouse.motion.x, &app->event->mouse.motion.y);
+			if (state >= SDL_BUTTON_RMASK) {
+				app->event->mouse.right.status = MOUSE_DRAG;
+				state -= SDL_BUTTON_RMASK;
+			}
+			if (state >= SDL_BUTTON_MMASK) {
+				app->event->mouse.middle.status = MOUSE_DRAG;
+				state -= SDL_BUTTON_MMASK;
+			}
+			if (state >= SDL_BUTTON_LMASK) {
+				app->event->mouse.left.status = MOUSE_DRAG;
+				state -= SDL_BUTTON_LMASK;
+			}
+			if (state < 1) {
+				app->event->mouse.is_motion = 1;
+			}
 			break;
 
 		case SDL_EVENT_MOUSE_BUTTON_DOWN:
-//			SDL_Log("Mouse button down: %d", event->button.button);
 			app->event->mouse.state = SDL_GetMouseState(&app->event->mouse.motion.x, &app->event->mouse.motion.y);
-//			app->event->mouse.is_motion = 1;
-//			app->event->mouse.motion = (SDL_FPoint){evt.motion.x, evt.motion.y};
 			switch (event->button.button) {
 				case SDL_BUTTON_LEFT:
 					app->event->mouse.left.status = MOUSE_DOWN;
@@ -63,7 +74,6 @@ SDL_AppResult event_call(app_t *app, SDL_Event *event) {
 					app->event->mouse.right.down = app->event->mouse.motion;
 					break;
 			}
-			SDL_Log("L: %d | M: %d | R: %d", app->event->mouse.left.status, app->event->mouse.middle.status, app->event->mouse.right.status);
 			break;
 
 		case SDL_EVENT_MOUSE_BUTTON_UP:
@@ -94,7 +104,6 @@ SDL_AppResult event_call(app_t *app, SDL_Event *event) {
 					}
 					break;
 			}
-			SDL_Log("L: %d | M: %d | R: %d", app->event->mouse.left.status, app->event->mouse.middle.status, app->event->mouse.right.status);
 			break;
 
 		case SDL_EVENT_MOUSE_WHEEL:
