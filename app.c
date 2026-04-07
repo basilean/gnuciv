@@ -53,8 +53,41 @@ void app_info() {
 	SDL_Log("Audio: %s", SDL_GetCurrentAudioDriver());
 }
 
-void app_input(app_t *app) {
+static inline bool in_frect(const SDL_FPoint *p, const SDL_FRect *r) {
+	return (p->x >= r->x) &&
+		(p->x <  r->x + r->w) &&
+		(p->y >= r->y) &&
+		(p->y <  r->y + r->h);
+}
 
+void app_input(app_t *app) {
+	if(app->event->mouse.is_event) {
+		for(uint16_t i = app->layers->count; i > 0; i--) {
+			if(!app->layers->layer[i - 1]->enable || !app->layers->layer[i - 1]->active) {
+				continue;
+			}
+			SDL_Log("Check layer: %d", i - 1);
+			switch(app->layers->layer[i - 1]->type) {
+				case LAYER_GRID:
+						uint16_t x = app->event->mouse.motion.x / app->layers->layer[i - 1]->grid->size;
+						uint16_t y = app->event->mouse.motion.y / app->layers->layer[i - 1]->grid->size;
+						uint16_t pos = (app->layers->layer[i - 1]->grid->w * y) + x;
+						if(app->layers->layer[i - 1]->grid->cell[pos] != NULL) {
+							SDL_Log("Cell with content: %d", pos);
+							SDL_FPoint point = {app->event->mouse.motion.x, app->event->mouse.motion.y};
+							for(uint16_t ii = app->layers->layer[i - 1]->grid->cell[pos]->count; ii > 0; ii--) {
+//								if(!app->layers->layer[i - 1]->enable || !app->layers->layer[i - 1]->active) {
+//									continue;
+//								}
+								if(in_frect(&point, &app->layers->layer[i - 1]->grid->cell[pos]->widget[ii - 1]->rect)) {
+									SDL_Log("Widget: %d", ii - 1);
+								}
+							}
+						}
+						break;
+			}
+		}
+	}
 }
 
 void app_resize(app_t *app) {

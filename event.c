@@ -104,6 +104,7 @@ SDL_AppResult event_call(app_t *app, SDL_Event *event) {
 					}
 					break;
 			}
+			app->event->mouse.is_event = true;
 			break;
 
 		case SDL_EVENT_MOUSE_WHEEL:
@@ -121,6 +122,7 @@ SDL_AppResult event_call(app_t *app, SDL_Event *event) {
 }
 
 void event_clean(app_t *app) {
+	app->event->mouse.is_event = false;
 	app->event->mouse.is_wheel = 0;
 	app->event->mouse.wheel.x = 0;
 	app->event->mouse.wheel.y = 0;

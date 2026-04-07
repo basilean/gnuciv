@@ -5,9 +5,6 @@
 typedef struct widget_t widget_t;
 typedef struct layer_t layer_t;
 
-#define CELL_INDEX(g, x, y) ((y) * (g)->w + (x))
-#define CELL_MAX 16
-
 typedef struct cell_t {
 	widget_t **widget;
 	uint8_t count;
@@ -24,10 +21,11 @@ typedef struct layer_grid_t {
 	cell_t **cell;
 } layer_grid_t;
 
-layer_t* layer_grid_new(SDL_Renderer *, uint16_t size);
+layer_t* layer_grid_new(SDL_Renderer *, uint16_t size, SDL_Color);
+void layer_grid_index(layer_grid_t *, widget_t *);
 void layer_grid_resize(SDL_Renderer *, layer_grid_t *);
-void layer_grid_destroy(layer_grid_t *);
-void layer_grid_add(layer_grid_t *, widget_t *);
 void layer_grid_draw(SDL_Renderer *, layer_grid_t *);
+void layer_grid_add(layer_grid_t *, widget_t *);
 void layer_grid_del(layer_grid_t *, widget_t *);
+void layer_grid_destroy(layer_grid_t *);
 #endif

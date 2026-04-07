@@ -18,6 +18,7 @@ typedef struct layer_t {
 	SDL_Texture *cache;
 	bool refresh;
 	bool enable;
+	bool active;
 	union {
 		layer_grid_t *grid;
 		layer_bg_t *bg;

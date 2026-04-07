@@ -1,21 +1,25 @@
 #include "game.h"
 #include "event.h"
-#include "layer/widget.h"
+#include "layer/widget_box.h"
 #include "layer/layer.h"
+
+#define COLOR_BLACK (SDL_Color){255, 255, 255, 255}
+#define COLOR_GREEN (SDL_Color){0, 255, 0, 255}
+#define COLOR_GRAY_50 (SDL_Color){127, 127, 127, 127}
 
 void game_init(app_t *app) {
 	app->layers = layer_list_new();
 
-	layer_t *bg = layer_bg_new(app->render, (SDL_Color){120, 120, 120, 255}, "bg.png", 255);
+	layer_t *bg = layer_bg_new(app->render, COLOR_BLACK, "bg.png", 255);
 	layer_list_add(app->layers, bg);
-	layer_t *grid = layer_grid_new(app->render, 60);
+
+	layer_t *grid = layer_grid_new(app->render, 60, COLOR_GRAY_50);
 	layer_list_add(app->layers, grid);
 	grid->enable = false;
-	widget_t *widget = widget_new((SDL_FRect){60, 60, 100, 100});
-	SDL_Log("Layers: %d", app->layers->count);
+	widget_t *widget = widget_box_new(app->render, (SDL_FRect){20, 20, 100, 100}, COLOR_GREEN);
 	layer_grid_add(grid->grid, widget);
-	SDL_Log("Widgets: %d", grid->grid->widgets);
-	layer_grid_del(grid->grid, widget);
+
+	SDL_Log("Layers: %d", app->layers->count);
 	SDL_Log("Widgets: %d", grid->grid->widgets);
 }
 

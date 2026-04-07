@@ -5,6 +5,7 @@
 layer_t * layer_bg_new(SDL_Renderer *render, SDL_Color color, const char *file, uint8_t alpha) {
 	layer_t *layer = layer_new(render);
 	layer->type = LAYER_BG;
+	layer->active = false;
 	layer->bg = SDL_calloc(1, sizeof(layer_bg_t));
 	layer->bg->color = color;
 	layer->bg->alpha = alpha;
