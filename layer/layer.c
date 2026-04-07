@@ -89,6 +89,9 @@ bool layer_input(event_t *event, layer_t *layer) {
 						uint16_t w = i - 1;
 						if(in_frect(&point, &layer->grid->cell[pos]->widget[w]->rect)) {
 							SDL_Log("Widget: %d", w);
+							if(layer->grid->cell[pos]->widget[w]->click != NULL) {
+								layer->grid->cell[pos]->widget[w]->click();
+							}
 							return true;
 						}
 					}

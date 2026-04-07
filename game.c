@@ -7,6 +7,10 @@
 #define COLOR_GREEN (SDL_Color){0, 255, 0, 255}
 #define COLOR_GRAY_50 (SDL_Color){127, 127, 127, 127}
 
+void game_hello() {
+	SDL_Log("Hello World!");
+}
+
 void game_init(app_t *app) {
 	app->layers = layer_list_new();
 
@@ -20,6 +24,7 @@ void game_init(app_t *app) {
 	grid->pos.min = (SDL_FRect){20, 20, 200, 200};
 	grid->pos.max = (SDL_FRect){40, 40, 400, 400};
 	widget_t *widget = widget_box_new(app->render, (SDL_FRect){20, 20, 100, 100}, COLOR_GREEN);
+	widget->click = game_hello;
 	layer_grid_add(grid->grid, widget);
 	widget_t *widget2 = widget_box_new(app->render, (SDL_FRect){130, 130, 50, 50}, COLOR_BLACK);
 	layer_grid_add(grid->grid, widget2);

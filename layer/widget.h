@@ -18,6 +18,7 @@ typedef struct widget_t {
 	uint8_t X; // max
 	uint8_t y;
 	uint8_t Y;
+	void (*click)();
 	union {
 		widget_box_t *box;
 	};
