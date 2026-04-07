@@ -7,6 +7,7 @@
 #include "bg.h"
 #include "position.h"
 #include "../event.h"
+#include "../app.h"
 
 typedef enum {
 	LAYER_COMMON = 0,
@@ -31,7 +32,7 @@ typedef struct layer_t {
 
 layer_t * layer_new(SDL_Renderer *);
 void layer_destroy(layer_t *);
-void layer_resize(SDL_Renderer *, layer_t *);
+void layer_resize(app_t *, layer_t *);
 void layer_draw(SDL_Renderer *, layer_t *);
 bool layer_input(event_t *, layer_t *);
 #endif

@@ -1,6 +1,7 @@
 #ifndef GRID_H
 #define GRID_H
 #include <SDL3/SDL.h>
+#include "../app.h"
 
 typedef struct widget_t widget_t;
 typedef struct layer_t layer_t;
@@ -21,9 +22,9 @@ typedef struct layer_grid_t {
 	cell_t **cell;
 } layer_grid_t;
 
-layer_t* layer_grid_new(SDL_Renderer *, uint16_t size, SDL_Color);
+layer_t* layer_grid_new(app_t *, uint16_t size, SDL_Color);
 void layer_grid_index(layer_grid_t *, widget_t *);
-void layer_grid_resize(SDL_Renderer *, layer_grid_t *);
+void layer_grid_resize(app_t *, layer_t *);
 void layer_grid_draw(SDL_Renderer *, layer_grid_t *);
 void layer_grid_add(layer_grid_t *, widget_t *);
 void layer_grid_del(layer_grid_t *, widget_t *);

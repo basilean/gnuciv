@@ -28,13 +28,13 @@ void layer_destroy(layer_t *layer) {
 	SDL_free(layer);
 }
 
-void layer_resize(SDL_Renderer *render, layer_t *layer) {
+void layer_resize(app_t *app, layer_t *layer) {
 	int w, h;
-	SDL_GetCurrentRenderOutputSize(render, &w, &h);
+	SDL_GetCurrentRenderOutputSize(app->render, &w, &h);
 	SDL_DestroyTexture(layer->cache);
 	
 	layer->cache = SDL_CreateTexture(
-		render,
+		app->render,
 		SDL_PIXELFORMAT_RGBA8888,
 		SDL_TEXTUREACCESS_TARGET,
 		layer->pos.size.w, layer->pos.size.h
@@ -44,7 +44,7 @@ void layer_resize(SDL_Renderer *render, layer_t *layer) {
 				//layer_bg_draw(render, layer->bg);
 				break;
 		case LAYER_GRID:
-				layer_grid_resize(render, layer->grid);
+				layer_grid_resize(app, layer);
 				break;
 	}
 	layer->refresh = true;
@@ -78,13 +78,21 @@ bool layer_input(event_t *event, layer_t *layer) {
 	if(!layer->enable || !layer->active) {
 		return false;
 	}
+	SDL_FPoint pointer = (SDL_FPoint){event->mouse.motion.x, event->mouse.motion.y};
+	if(!in_frect(&pointer, &layer->pos.size)) {
+		SDL_Log("Not here");
+		return false;
+	}
+	SDL_Log("Passed.");
 	switch(layer->type) {
 		case LAYER_GRID:
-				uint16_t x = event->mouse.motion.x / layer->grid->size;
-				uint16_t y = event->mouse.motion.y / layer->grid->size;
+				float mx = event->mouse.motion.x - layer->pos.size.x;
+				float my = event->mouse.motion.y - layer->pos.size.y;
+				uint16_t x = mx / layer->grid->size;
+				uint16_t y = my / layer->grid->size;
 				uint16_t pos = (layer->grid->w * y) + x;
 				if(layer->grid->cell[pos] != NULL) {
-					SDL_FPoint point = {event->mouse.motion.x, event->mouse.motion.y};
+					SDL_FPoint point = {mx, my};
 					for(uint16_t i = layer->grid->cell[pos]->count; i > 0; i--) {
 						uint16_t w = i - 1;
 						if(in_frect(&point, &layer->grid->cell[pos]->widget[w]->rect)) {

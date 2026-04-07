@@ -78,7 +78,7 @@ void app_resize(app_t *app) {
 	app->screen.h = h;
 	for(uint16_t i = 0; i < app->layers->count; i++) {
 		position_set(&app->screen, &app->layers->layer[i]->pos);
-		layer_resize(app->render, app->layers->layer[i]);
+		layer_resize(app, app->layers->layer[i]);
 	}
 }
 

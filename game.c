@@ -18,11 +18,12 @@ void game_init(app_t *app) {
 	layer_list_add(app->layers, bg);
 	bg->pos.anchor = FULL;
 
-	layer_t *grid = layer_grid_new(app->render, 60, COLOR_GRAY_50);
-	layer_list_add(app->layers, grid);
+	layer_t *grid = layer_grid_new(app, 60, COLOR_GRAY_50);
 	grid->enable = false;
-	grid->pos.min = (SDL_FRect){20, 20, 200, 200};
-	grid->pos.max = (SDL_FRect){40, 40, 400, 400};
+//	grid->pos.min = (SDL_FRect){20, 20, 200, 200};
+//	grid->pos.max = (SDL_FRect){40, 40, 400, 400};
+	layer_list_add(app->layers, grid);
+
 	widget_t *widget = widget_box_new(app->render, (SDL_FRect){20, 20, 100, 100}, COLOR_GREEN);
 	widget->click = game_hello;
 	layer_grid_add(grid->grid, widget);
