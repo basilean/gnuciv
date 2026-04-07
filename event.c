@@ -104,7 +104,7 @@ SDL_AppResult event_call(app_t *app, SDL_Event *event) {
 					}
 					break;
 			}
-			app->event->mouse.is_event = true;
+			app->event->is_event = true;
 			break;
 
 		case SDL_EVENT_MOUSE_WHEEL:
@@ -122,12 +122,14 @@ SDL_AppResult event_call(app_t *app, SDL_Event *event) {
 }
 
 void event_clean(app_t *app) {
-	app->event->mouse.is_event = false;
+	app->event->is_event = false;
+
 	app->event->mouse.is_wheel = 0;
 	app->event->mouse.wheel.x = 0;
 	app->event->mouse.wheel.y = 0;
 	app->event->mouse.is_motion = 0;
 	app->event->key.count = 0;
+	app->event->win.resize = 0;
 	// IF diff of none or down.
 	if (app->event->mouse.left.status > 1) {
 		app->event->mouse.left.status = 0;

@@ -53,39 +53,14 @@ void app_info() {
 	SDL_Log("Audio: %s", SDL_GetCurrentAudioDriver());
 }
 
-static inline bool in_frect(const SDL_FPoint *p, const SDL_FRect *r) {
-	return (p->x >= r->x) &&
-		(p->x <  r->x + r->w) &&
-		(p->y >= r->y) &&
-		(p->y <  r->y + r->h);
-}
-
 void app_input(app_t *app) {
-	if(app->event->mouse.is_event) {
-		for(uint16_t i = app->layers->count; i > 0; i--) {
-			if(!app->layers->layer[i - 1]->enable || !app->layers->layer[i - 1]->active) {
-				continue;
-			}
-			SDL_Log("Check layer: %d", i - 1);
-			switch(app->layers->layer[i - 1]->type) {
-				case LAYER_GRID:
-						uint16_t x = app->event->mouse.motion.x / app->layers->layer[i - 1]->grid->size;
-						uint16_t y = app->event->mouse.motion.y / app->layers->layer[i - 1]->grid->size;
-						uint16_t pos = (app->layers->layer[i - 1]->grid->w * y) + x;
-						if(app->layers->layer[i - 1]->grid->cell[pos] != NULL) {
-							SDL_Log("Cell with content: %d", pos);
-							SDL_FPoint point = {app->event->mouse.motion.x, app->event->mouse.motion.y};
-							for(uint16_t ii = app->layers->layer[i - 1]->grid->cell[pos]->count; ii > 0; ii--) {
-//								if(!app->layers->layer[i - 1]->enable || !app->layers->layer[i - 1]->active) {
-//									continue;
-//								}
-								if(in_frect(&point, &app->layers->layer[i - 1]->grid->cell[pos]->widget[ii - 1]->rect)) {
-									SDL_Log("Widget: %d", ii - 1);
-								}
-							}
-						}
-						break;
-			}
+	if(!app->event->is_event) {
+		return;
+	}
+	for(uint16_t i = app->layers->count; i > 0; i--) {
+		if(layer_input(app->event, app->layers->layer[i - 1])) {
+			// Finish loop when someone takes care of event.
+			return;
 		}
 	}
 }
@@ -97,7 +72,6 @@ void app_resize(app_t *app) {
 	for(uint16_t i = 0; i < app->layers->count; i++) {
 		layer_resize(app->render, app->layers->layer[i]);
 	}
-	app->event->win.resize = 0;
 }
 
 void app_draw(app_t *app) {
@@ -111,11 +85,12 @@ void app_draw(app_t *app) {
 }
 
 void app_clean(app_t *app) {
-	if (app) {
-		layer_list_destroy(app->layers);
-		if (app->event) SDL_free(app->event);
-		if (app->render) SDL_DestroyRenderer(app->render);
-		if (app->win) SDL_DestroyWindow(app->win);
-		SDL_free(app);
+	if (!app) {
+		return;
 	}
+	layer_list_destroy(app->layers);
+	if (app->event) SDL_free(app->event);
+	if (app->render) SDL_DestroyRenderer(app->render);
+	if (app->win) SDL_DestroyWindow(app->win);
+	SDL_free(app);
 }

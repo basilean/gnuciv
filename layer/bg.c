@@ -1,6 +1,5 @@
 #include <SDL3_image/SDL_image.h>
 #include "layer.h"
-//#include "bg.h"
 
 layer_t * layer_bg_new(SDL_Renderer *render, SDL_Color color, const char *file, uint8_t alpha) {
 	layer_t *layer = layer_new(render);

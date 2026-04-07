@@ -27,7 +27,6 @@ typedef struct {
 
 typedef struct {
 // Here, I need a flag to let app now of a pointer event.
-	bool is_event;
 	uint8_t is_motion;
 	SDL_FPoint motion;
 	SDL_MouseButtonFlags state;
@@ -49,6 +48,7 @@ typedef union {
 } event_win_t;
 
 typedef struct event_t {
+	bool is_event;
 	event_win_t win;
 	event_key_t key;
 	event_mouse_t mouse;

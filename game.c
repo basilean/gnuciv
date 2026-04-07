@@ -18,6 +18,8 @@ void game_init(app_t *app) {
 	grid->enable = false;
 	widget_t *widget = widget_box_new(app->render, (SDL_FRect){20, 20, 100, 100}, COLOR_GREEN);
 	layer_grid_add(grid->grid, widget);
+	widget_t *widget2 = widget_box_new(app->render, (SDL_FRect){130, 130, 50, 50}, COLOR_BLACK);
+	layer_grid_add(grid->grid, widget2);
 
 	SDL_Log("Layers: %d", app->layers->count);
 	SDL_Log("Widgets: %d", grid->grid->widgets);

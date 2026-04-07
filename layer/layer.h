@@ -5,6 +5,7 @@
 #include "grid.h"
 #include "widget.h"
 #include "bg.h"
+#include "../event.h"
 
 typedef enum {
 	LAYER_COMMON = 0,
@@ -29,4 +30,5 @@ layer_t * layer_new(SDL_Renderer *);
 void layer_destroy(layer_t *);
 void layer_resize(SDL_Renderer *, layer_t *);
 void layer_draw(SDL_Renderer *, layer_t *);
+bool layer_input(event_t *, layer_t *);
 #endif
