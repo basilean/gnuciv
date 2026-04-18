@@ -1,4 +1,4 @@
-#include "config.h"
+#include "../config.h"
 #include "layer.h"
 
 layer_t * layer_new(SDL_Renderer *render) {

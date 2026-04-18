@@ -1,6 +1,6 @@
 #include "layer.h"
-#include "widget.h"
-#include "position.h"
+#include "../widget/widget.h"
+#include "../position.h"
 
 layer_t * layer_grid_new(app_t *app, uint16_t size, SDL_Color color) {
 	layer_t *layer = layer_new(app->render);// TODO: Needs to set position.

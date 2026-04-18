@@ -9,7 +9,7 @@ layer_t * layer_bg_new(SDL_Renderer *render, SDL_Color color, const char *file, 
 	layer->bg->color = color;
 	layer->bg->alpha = alpha;
 	layer->bg->image = IMG_Load(file);
-	if(!layer->bg->image) {
+	if(layer->bg->image == NULL) {
 		SDL_LogCritical(SDL_LOG_CATEGORY_SYSTEM, "Failed loading background.\n");
 	}
 	return layer;
@@ -23,6 +23,9 @@ void layer_bg_destroy(layer_bg_t *bg) {
 void layer_bg_draw(SDL_Renderer *render, layer_bg_t *bg) {
 	SDL_SetRenderDrawColor(render, bg->color.r, bg->color.g, bg->color.b, bg->color.a);
 	SDL_RenderClear(render);
+	if (bg->image == NULL) {
+		return;
+	}
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(render, bg->image);
 	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureAlphaMod(texture, bg->alpha);

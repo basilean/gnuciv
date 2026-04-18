@@ -2,7 +2,7 @@
 #include "config.h"
 #include "app.h"
 #include "event.h"
-#include "layer.h"
+#include "layer/layer.h"
 #include "position.h"
 
 SDL_AppResult app_new(void **state, int argc, char **argv) {
@@ -48,7 +48,7 @@ SDL_AppResult app_new(void **state, int argc, char **argv) {
 	}
 
 	app->event = SDL_calloc(1, sizeof(event_t));
-
+	app->event->win.resize = true;
 	*state = app;
   app_info();
 	return SDL_APP_CONTINUE;
@@ -103,7 +103,7 @@ void app_quit(app_t *app) {
 	if (!app) {
 		SDL_Quit();
 	}
-	layer_list_destroy(app->layers);
+	layers_destroy(app->layers);
 	if (app->event) SDL_free(app->event);
 	if (app->render) SDL_DestroyRenderer(app->render);
 	if (app->win) SDL_DestroyWindow(app->win);

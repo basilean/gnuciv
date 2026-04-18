@@ -1,13 +1,13 @@
 #include "layer.h"
 
-layer_list_t * layer_list_new() {
-	layer_list_t *list = SDL_calloc(1, sizeof(layer_list_t));
+layers_t * layers_new() {
+	layers_t *list = SDL_calloc(1, sizeof(layers_t));
 	list->layer = NULL;
 	list->count = 0;
 	return list;
 }
 
-void layer_list_destroy(layer_list_t *list) {
+void layers_destroy(layers_t *list) {
 	for(uint16_t i = 0; i < list->count; i++) {
 		if(list->layer[i]) layer_destroy(list->layer[i]);
 	}
@@ -15,7 +15,7 @@ void layer_list_destroy(layer_list_t *list) {
 	if (list) SDL_free(list);
 }
 
-void layer_list_add(layer_list_t *list, layer_t *layer) {
+void layers_add(layers_t *list, layer_t *layer) {
 	list->layer = SDL_realloc(list->layer, (list->count + 1) * sizeof(layer_t *));
 	if(list->layer == NULL) {
 		SDL_Log("SEGFAULT REALLOC");
@@ -24,7 +24,7 @@ void layer_list_add(layer_list_t *list, layer_t *layer) {
 	list->count++;
 }
 
-void layer_list_del(layer_list_t *list, layer_t *layer) {
+void layers_del(layers_t *list, layer_t *layer) {
 	uint16_t t = 0;
 	for(uint16_t i = 0; i < list->count; i++) {
 		if (list->layer[i] == layer) {

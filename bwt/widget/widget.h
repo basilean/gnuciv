@@ -1,7 +1,7 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 #include <SDL3/SDL.h>
-#include "widget_box.h"
+#include "box.h"
 
 typedef enum {
 	WIDGET_COMMON = 0,

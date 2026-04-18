@@ -1,7 +1,7 @@
 #include "bwt/config.h"
 #include "bwt/event.h"
-#include "bwt/widget_box.h"
-#include "bwt/layer.h"
+#include "bwt/widget/box.h"
+#include "bwt/layer/layer.h"
 #include "game.h"
 
 void game_hello() {
@@ -9,17 +9,18 @@ void game_hello() {
 }
 
 void game_init(app_t *app) {
-	app->layers = layer_list_new();
+	app->layers = layers_new();
 
 	layer_t *bg = layer_bg_new(app->render, COLOR_BLACK, "bg.png", 255);
-	layer_list_add(app->layers, bg);
+	layers_add(app->layers, bg);
 	bg->pos.anchor = FULL;
 
 	layer_t *grid = layer_grid_new(app, 60, COLOR_GRAY_20);
-	grid->enable = false;
+//	grid->enable = false;
 	grid->pos.min = (SDL_FRect){20, 20, 200, 200};
 	grid->pos.max = (SDL_FRect){40, 40, 400, 400};
-	layer_list_add(app->layers, grid);
+	grid->pos.anchor = MIDDLE_CENTER;
+	layers_add(app->layers, grid);
 
 	widget_t *widget = widget_box_new(app->render, (SDL_FRect){20, 20, 100, 100}, COLOR_GREEN);
 	widget->click = game_hello;
@@ -30,6 +31,7 @@ void game_init(app_t *app) {
 
 	SDL_Log("Layers: %d", app->layers->count);
 	SDL_Log("Widgets: %d", grid->grid->widgets);
+//	app->event->win.resize = true;
 }
 
 void game_input(app_t *app) {

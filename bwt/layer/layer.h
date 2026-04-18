@@ -1,13 +1,13 @@
 #ifndef LAYER_H
 #define LAYER_H
 #include <SDL3/SDL.h>
-#include "layer_list.h"
+#include "layers.h"
 #include "grid.h"
-#include "widget.h"
+#include "../widget/widget.h"
 #include "bg.h"
-#include "position.h"
-#include "event.h"
-#include "app.h"
+#include "../position.h"
+#include "../event.h"
+#include "../app.h"
 
 typedef enum {
 	LAYER_COMMON = 0,

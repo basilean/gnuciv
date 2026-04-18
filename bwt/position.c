@@ -31,5 +31,41 @@ void position_set(SDL_FRect *screen, position_t *pos) {
 			pos->size.x = 0;
 			pos->size.y = 0;
 			break;
+		case TOP_LEFT:
+			pos->size.x = 0;
+			pos->size.y = 0;
+			break;
+		case TOP_CENTER:
+			pos->size.x = (sw - pos->size.w) * 0.5f;
+			pos->size.y = 0;
+			break;
+		case TOP_RIGHT:
+			pos->size.x = sw - pos->size.w;
+			pos->size.y = 0;
+			break;
+		case MIDDLE_LEFT:
+			pos->size.x = 0;
+			pos->size.y = (sh - pos->size.h) * 0.5f;
+			break;
+		case MIDDLE_CENTER:
+			pos->size.x = (sw - pos->size.w) * 0.5f;
+			pos->size.y = (sh - pos->size.h) * 0.5f;
+			break;
+		case MIDDLE_RIGHT:
+			pos->size.x = sw - pos->size.w;
+			pos->size.y = (sh - pos->size.h) * 0.5f;
+			break;
+		case BOTTOM_LEFT:
+			pos->size.x = 0;
+			pos->size.y = sh - pos->size.h;
+			break;
+		case BOTTOM_CENTER:
+			pos->size.x = (sw - pos->size.w) * 0.5f;
+			pos->size.y = sh - pos->size.h;
+			break;
+		case BOTTOM_RIGHT:
+			pos->size.x = sw - pos->size.w;
+			pos->size.y = sh - pos->size.h;
+			break;
 	}
 }

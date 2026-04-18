@@ -3,13 +3,13 @@
 #include <SDL3/SDL.h>
 
 typedef struct event_t event_t;
-typedef struct layer_list_t layer_list_t;
+typedef struct layers_t layers_t;
 
 typedef struct app_t {
 	SDL_Window* win;
 	SDL_Renderer* render;
 	event_t *event;
-	layer_list_t *layers;
+	layers_t *layers;
 	SDL_FRect screen;
 } app_t;
 

@@ -1,6 +1,6 @@
 #include "event.h"
 #include "app.h"
-#include "widget.h"
+#include "widget/widget.h"
 
 int is_click(SDL_FPoint *event, SDL_FPoint *down) {
 	// TODO: Add optional pixel toleration.
