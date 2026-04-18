@@ -1,11 +1,12 @@
 PROGRAM = gnuciv
-CC = gcc
+CC = gcc -g
 OBJCOPY = objcopy
 CFLAGS = `pkg-config --cflags sdl3 sdl3-image sdl3-ttf`
 LDFLAGS = `pkg-config --libs sdl3 sdl3-image sdl3-ttf`
-OBJS = main.o app.o event.o game.o
-OBJS += layer/layer.o layer/layer_list.o layer/grid.o layer/bg.o
-OBJS += layer/widget.o layer/widget_box.o layer/position.o
+OBJS = main.o game.o
+OBJS += bwt/app.o bwt/event.o
+OBJS += bwt/layer.o bwt/layer_list.o bwt/grid.o bwt/bg.o
+OBJS += bwt/widget.o bwt/widget_box.o bwt/position.o
 
 ifneq ($(V),1)
 Q := @

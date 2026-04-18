@@ -17,6 +17,9 @@ void layer_list_destroy(layer_list_t *list) {
 
 void layer_list_add(layer_list_t *list, layer_t *layer) {
 	list->layer = SDL_realloc(list->layer, (list->count + 1) * sizeof(layer_t *));
+	if(list->layer == NULL) {
+		SDL_Log("SEGFAULT REALLOC");
+	}
 	list->layer[list->count] = layer;
 	list->count++;
 }

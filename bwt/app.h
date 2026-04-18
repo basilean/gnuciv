@@ -14,9 +14,11 @@ typedef struct app_t {
 } app_t;
 
 SDL_AppResult app_new(void **, int, char **);
-void app_clean(app_t *);
+void app_quit(app_t *);
 void app_input(app_t *);
 void app_draw(app_t *);
 void app_resize(app_t *);
 void app_info();
+SDL_AppResult app_event(app_t *, SDL_Event *);
+SDL_AppResult app_continue(app_t *);
 #endif

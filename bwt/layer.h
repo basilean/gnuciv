@@ -6,8 +6,8 @@
 #include "widget.h"
 #include "bg.h"
 #include "position.h"
-#include "../event.h"
-#include "../app.h"
+#include "event.h"
+#include "app.h"
 
 typedef enum {
 	LAYER_COMMON = 0,

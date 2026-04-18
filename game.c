@@ -1,11 +1,8 @@
+#include "bwt/config.h"
+#include "bwt/event.h"
+#include "bwt/widget_box.h"
+#include "bwt/layer.h"
 #include "game.h"
-#include "event.h"
-#include "layer/widget_box.h"
-#include "layer/layer.h"
-
-#define COLOR_BLACK (SDL_Color){255, 255, 255, 255}
-#define COLOR_GREEN (SDL_Color){0, 255, 0, 255}
-#define COLOR_GRAY_50 (SDL_Color){127, 127, 127, 127}
 
 void game_hello() {
 	SDL_Log("Hello World!");
@@ -18,15 +15,16 @@ void game_init(app_t *app) {
 	layer_list_add(app->layers, bg);
 	bg->pos.anchor = FULL;
 
-	layer_t *grid = layer_grid_new(app, 60, COLOR_GRAY_50);
+	layer_t *grid = layer_grid_new(app, 60, COLOR_GRAY_20);
 	grid->enable = false;
-//	grid->pos.min = (SDL_FRect){20, 20, 200, 200};
-//	grid->pos.max = (SDL_FRect){40, 40, 400, 400};
+	grid->pos.min = (SDL_FRect){20, 20, 200, 200};
+	grid->pos.max = (SDL_FRect){40, 40, 400, 400};
 	layer_list_add(app->layers, grid);
 
 	widget_t *widget = widget_box_new(app->render, (SDL_FRect){20, 20, 100, 100}, COLOR_GREEN);
 	widget->click = game_hello;
 	layer_grid_add(grid->grid, widget);
+
 	widget_t *widget2 = widget_box_new(app->render, (SDL_FRect){130, 130, 50, 50}, COLOR_BLACK);
 	layer_grid_add(grid->grid, widget2);
 
@@ -46,4 +44,5 @@ void game_input(app_t *app) {
 }
 
 void game_logic(app_t *app) {
+	game_input(app); // <- Events for this specific game.
 }

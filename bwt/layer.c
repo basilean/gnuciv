@@ -1,3 +1,4 @@
+#include "config.h"
 #include "layer.h"
 
 layer_t * layer_new(SDL_Renderer *render) {
@@ -10,6 +11,8 @@ layer_t * layer_new(SDL_Renderer *render) {
 		SDL_TEXTUREACCESS_TARGET,
 		w, h
 	);
+	layer->pos.min = (SDL_FRect){0, 0, SCREEN_MIN_W, SCREEN_MIN_H};
+	layer->pos.max = (SDL_FRect){0, 0, SCREEN_MAX_W, SCREEN_MAX_H};
 	layer->refresh = true;
 	layer->enable = true;
 	return layer;
@@ -74,6 +77,7 @@ static inline bool in_frect(const SDL_FPoint *p, const SDL_FRect *r) {
 		(p->y <  r->y + r->h);
 }
 
+// TODO: SegFault
 bool layer_input(event_t *event, layer_t *layer) {
 	if(!layer->enable || !layer->active) {
 		return false;
@@ -88,13 +92,33 @@ bool layer_input(event_t *event, layer_t *layer) {
 		case LAYER_GRID:
 				float mx = event->mouse.motion.x - layer->pos.size.x;
 				float my = event->mouse.motion.y - layer->pos.size.y;
+				if (mx < 0 || my < 0) {
+					SDL_Log("SEGFAULT: %d %d", mx, my);
+					return false;
+				}
 				uint16_t x = mx / layer->grid->size;
 				uint16_t y = my / layer->grid->size;
 				uint16_t pos = (layer->grid->w * y) + x;
+				if (pos > layer->grid->count) {
+					SDL_Log("SEGFUCK HERE... WHY?: %d %d", pos, layer->grid->count);
+					return false;
+				}
 				if(layer->grid->cell[pos] != NULL) {
 					SDL_FPoint point = {mx, my};
+					SDL_Log("POS: %d %d %f %f %d %d", layer->grid->count, pos, mx, my, x, y);
 					for(uint16_t i = layer->grid->cell[pos]->count; i > 0; i--) {
 						uint16_t w = i - 1;
+						SDL_Log("CELL: %d %d", pos, w);
+				if (layer->grid->cell[pos]->widget[w] == NULL) {
+					SDL_Log("SEGFAULT 2: %d %d", pos, w);
+					return false;
+				}
+
+				if (&layer->grid->cell[pos]->widget[w]->rect == NULL) {
+					SDL_Log("SEGFAULT 3: %d %d", pos, w);
+					return false;
+				}
+
 						if(in_frect(&point, &layer->grid->cell[pos]->widget[w]->rect)) {
 							SDL_Log("Widget: %d", w);
 							if(layer->grid->cell[pos]->widget[w]->click != NULL) {

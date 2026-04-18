@@ -1,7 +1,7 @@
 #ifndef GRID_H
 #define GRID_H
 #include <SDL3/SDL.h>
-#include "../app.h"
+#include "app.h"
 
 typedef struct widget_t widget_t;
 typedef struct layer_t layer_t;

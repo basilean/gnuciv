@@ -1,9 +1,5 @@
+#include "config.h"
 #include "position.h"
-
-#define SCREEN_MIN_W 320
-#define SCREEN_MAX_W 1920
-#define SCREEN_MIN_H 240
-#define SCREEN_MAX_H 1080
 
 float clamp(float v, float min, float max) {
 	if (v < min) return min;
